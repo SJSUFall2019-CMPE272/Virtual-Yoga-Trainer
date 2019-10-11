@@ -1,7 +1,7 @@
 # Virtual Yoga Trainer 
 
 ## Abstract
-Are you a Yoga enthusiast? or someone who just wants to get started with yoga by learning new poses? then this app is for you! The Virtual Yoga trainer App can detect your yoga poses to checks if you are using the right form for the workout. 
+Are you a Yoga enthusiast? or someone who just wants to get started with yoga by learning new poses? then this app is for you! The Virtual Yoga trainer App can detect your yoga poses to check if you are using the right form for the workout. 
 
 This app can be used by anyone who wants a virtual yoga trainer anywhere/anytime to track and gamify their workouts, all you need is a phone with a camera. The app will come with a re-trained POSNET model to detect yoga poses accurately in realtime.
 
