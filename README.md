@@ -1,15 +1,15 @@
-# Virtual Yoga Workout Trainer 
-A workout/yoga companion application enhanced with machine learning
+# Virtual Yoga Trainer 
 
 ## Abstract
-A virtual Yoga workout trainer which detects if you are using the right form of exercise(eg. Yoga pose) for the workout using Posenet, also gives points based on the correctness of the posture. The app will try to gamify your workout experience.
-This app can be used by anyone who wants a virtual trainer anywhere/anytime to track and gamify their workouts. 
+Are you a Yoga enthusiast? or someone who just wants to get started with yoga by learning new poses? then this app is for you! The Virtual Yoga trainer App can detect your yoga poses to checks if you are using the right form for the workout. 
 
+This app can be used by anyone who wants a virtual yoga trainer anywhere/anytime to track and gamify their workouts, all you need is a phone with a camera. The app will come with a re-trained POSNET model to detect yoga poses accurately in realtime.
 
-We will apply transfer learning on a POSNET model to detect Yoga poses and this trained model will be embedded in the mobile application as TensorFlow lite model. Using this model realtime pose detection is done locally on device. 
+Capitalizing on the fact that there are over 230 million smartphone users in the USA alone and over 300 million yoga practitioners worldwide the Virtual yoga trainer will be able to cater to anyone who wants to make their workout routine more effective. 
+
 
 ## Architecture diagram
-![Architecture diagram](https://github.com/SJSUFall2019-CMPE272/Virtual-Trainer/blob/master/Architecture%20diag.jpg)
+![Architecture diagram](https://user-images.githubusercontent.com/18594304/66626073-bc253200-ebab-11e9-8fb9-9b1ac984f09d.png)
 
 ## Tech Stack
 ### Machine learning
@@ -19,6 +19,8 @@ We will apply transfer learning on a POSNET model to detect Yoga poses and this 
 [React Native](https://facebook.github.io/react-native/) - React Native is a framework for building native apps using React. The advantage of using React Native is that same codebase can be used for Android, IOS and other platforms. So a single application is only required to be written in Javascript using this framework which can be deployed across multiple platforms.
 
 ### Cloud Services
-Google Cloud : [Cloud Firestore](https://firebase.google.com/docs/firestore) - flexible, scalable database for mobile, web, and server development from Firebase and Google Cloud Platform. This database will be used to store user details, user preferences and user data. This data includes personal information, progress in app, app configurations etc. This is a cloud NoSQL database and can be accessed within the application via native SDKs.
+
+
+[Cloud Firestore](https://firebase.google.com/docs/firestore) - flexible, scalable database for mobile, web, and server development from Firebase and Google Cloud Platform. This database will be used to store user details, user preferences and user data. This data includes personal information, progress in app, app configurations etc. This is a cloud NoSQL database and can be accessed within the application via native SDKs.
 
 [Firebase authentication](https://firebase.google.com/docs/auth) - Users will be authenticated into the application using Google Firebase Authenticator. It supports authentication using passwords, phone numbers, popular federated identity providers like Google, Facebook and Twitter, and more.
