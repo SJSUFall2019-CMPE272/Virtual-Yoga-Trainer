@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1010674404620",
+    "firebase_url": "https://virtualtrainer-17743.firebaseio.com",
+    "project_id": "virtualtrainer-17743",
+    "storage_bucket": "virtualtrainer-17743.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1010674404620:android:1f8e67ed8cc30e1c760d29",
+        "android_client_info": {
+          "package_name": "com.cmpe272.VirtualTrainer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1010674404620-n43vckvi0d4a9llsklrr3c1shk87blgp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDA6-EzbUN7eL1fNxWkaaITQkw_PBz_8wA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1010674404620-n43vckvi0d4a9llsklrr3c1shk87blgp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
