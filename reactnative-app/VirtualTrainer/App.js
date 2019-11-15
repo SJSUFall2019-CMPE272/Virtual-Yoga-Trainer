@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 import { Input } from './components/Input';
 import { Button } from './components/Button';
 import { Home } from './components/Home';
+import { Learn } from './components/Learn';
 import * as GoogleSignIn from 'expo-google-sign-in';
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -112,6 +113,9 @@ const AppNavigator = createStackNavigator({
   },
   Home: {
     screen: Home,
+  },
+  Learn: {
+    screen: Learn,
   }
 },
   {
