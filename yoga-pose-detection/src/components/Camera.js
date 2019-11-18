@@ -2,8 +2,11 @@ import { drawKeyPoints, drawSkeleton } from "./utils";
 import React, { Component } from "react";
 import * as posenet from "@tensorflow-models/posenet";
 import cloneDeep from "lodash/cloneDeep";
-import imagePath from "./../testPose.jpg";
+import imagePath from "./../jojo_test2.jpg";
 import { assertParamsConsistent } from "@tensorflow/tfjs-core/dist/ops/concat_util";
+import LoadingOverlay from 'react-loading-overlay';
+
+var mode = "weighted";
 
 class PoseNet extends Component {
   static defaultProps = {
@@ -22,7 +25,7 @@ class PoseNet extends Component {
     imageScaleFactor: 0.5, //.5
     skeletonColor: "#ffadea",
     skeletonLineWidth: 6,
-    loadingText: "Loading...please be patient...",
+    loadingText: "Loading Posenet.. Please wait",
     //added by harshraj
     poseFrmImg: null,
     poseFrmVideo: null,
@@ -33,6 +36,10 @@ class PoseNet extends Component {
 
   constructor(props) {
     super(props, PoseNet.defaultProps);
+  }
+
+  state = {
+    loading: true
   }
 
   getCanvas = elem => {
@@ -54,7 +61,7 @@ class PoseNet extends Component {
 
     try {
       this.posenet = await posenet.load({
-        architecture: "ResNet50" //,
+       // architecture: "ResNet50" //,
         // outputStride: 32,
         // inputResolution: { width: 257, height: 200 },
         // quantBytes: 2
@@ -71,7 +78,13 @@ class PoseNet extends Component {
       flipHorizontal: false
     });
     this.setState({ poseFrmImg: pose });
-    const vector = this.createVectorFromObject2(pose);
+    var vector = null;
+    if (mode === "cosine") {
+      vector = this.createVectorFromObject1(pose);
+    } else {
+      vector = this.createVectorFromObject2(pose);
+    }
+    
     this.setState({ imageVector: vector });
     this.detectPose();
   }
@@ -162,8 +175,8 @@ class PoseNet extends Component {
             outputStride
           );
           const fakepose = this.state.poseFrmImg;
-          poses.push(fakepose);
-          //poses.push(pose);
+        //  poses.push(fakepose);
+          poses.push(pose);
           this.calculateCloseness(cloneDeep(pose));
           break;
         }
@@ -210,10 +223,12 @@ class PoseNet extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-8">
+          <LoadingOverlay active={this.state.loading} spinner text={this.props.loadingText}>
             <div className="m-2">
               <video id="videoNoShow" playsInline ref={this.getVideo} />
               <canvas className="webcam" ref={this.getCanvas} />
             </div>
+            </LoadingOverlay>
           </div>
           <div className="col-md-4">
             <div className="m-3">
@@ -273,11 +288,21 @@ class PoseNet extends Component {
 
   calculateCloseness(pose) {
     //console.log("test", pose);
-    const videoVector = this.createVectorFromObject2(pose);
+    var videoVector = null;
+    if (mode === "cosine") {
+      videoVector = this.createVectorFromObject1(pose);
+    } else {
+      videoVector = this.createVectorFromObject2(pose);
+    }
     //console.log(videoVector, this.state.imageVector);
     if (this.state.imageVector !== null) {
       const imageVector = this.state.imageVector;
-      const closeness = this.weightedDistanceMatching(videoVector, imageVector);
+      var closeness = null;
+      if (mode === "cosine") {
+        closeness = this.cosineDistanceMatching(videoVector, imageVector);
+      } else {
+        closeness = this.weightedDistanceMatching(videoVector, imageVector);
+      }   
       this.setState({ closeness });
     }
   }
@@ -336,17 +361,35 @@ class PoseNet extends Component {
 
   cosineDistanceMatching(poseVector1, poseVector2) {
     console.log("cosineDistanceMatching", poseVector1, poseVector2);
+    //Normalize two vectors
+    var normalVector1 = this.normalizeVector(poseVector1);
+    var normalVector2 = this.normalizeVector(poseVector2);
     var similarity = require("compute-cosine-similarity");
-    let cosineSimilarity = similarity(poseVector1, poseVector2);
+    let cosineSimilarity = similarity(normalVector1, normalVector2);
     let distance = 2 * (1 - cosineSimilarity);
     return Math.sqrt(distance);
   }
 
+  normalizeVector(poseVector) {
+    //deep copy and return
+    let normalized = cloneDeep(poseVector);
+    var l2norm = require( 'compute-l2norm' );
+    for (var i=0; i <normalized.length; i+=2) {
+      var norm = l2norm([normalized[i],normalized[i+1]]);
+      normalized[i] = normalized[i]/norm;
+      normalized[i+1] = normalized[i+1]/norm;
+    }
+    return normalized;
+  }
+
   weightedDistanceMatching(poseVector1, poseVector2) {
     let vector1PoseXY = poseVector1.slice(0, 34);
+    // need to normalize the vectors
+    vector1PoseXY = this.normalizeVector(vector1PoseXY);
     let vector1Confidences = poseVector1.slice(34, 51);
     let vector1ConfidenceSum = poseVector1.slice(51, 52);
     let vector2PoseXY = poseVector2.slice(0, 34);
+    vector2PoseXY = this.normalizeVector(vector2PoseXY);
     // First summation
     let summation1 = 1 / vector1ConfidenceSum;
     // Second summation
