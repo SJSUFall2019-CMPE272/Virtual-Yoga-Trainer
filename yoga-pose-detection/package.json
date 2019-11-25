@@ -9,6 +9,7 @@
     "bootstrap": "^4.1.1",
     "compute-cosine-similarity": "^1.0.0",
     "compute-l2norm": "^1.1.0",
+    "firebase": "^7.5.0",
     "lodash": "^4.17.15",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
