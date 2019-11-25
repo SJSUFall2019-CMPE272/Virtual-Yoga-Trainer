@@ -6,6 +6,8 @@ import PoseDetection from "./components/poseDetection";
 import PoseNet from "./components/Camera";
 import { Switch, Route } from "react-router-dom";
 import { BrowserRouter as Router } from "react-router-dom";
+import Screen from "./components/Screen";
+
 class App extends React.Component {
   state = {
     user: {}
