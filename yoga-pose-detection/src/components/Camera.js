@@ -1,17 +1,20 @@
 import { drawKeyPoints, drawSkeleton } from "./utils";
+import { Badge } from "reactstrap";
 import React, { Component } from "react";
 import * as posenet from "@tensorflow-models/posenet";
 import cloneDeep from "lodash/cloneDeep";
 import imagePath from "./../jojo_test2.jpg";
 import { assertParamsConsistent } from "@tensorflow/tfjs-core/dist/ops/concat_util";
-import LoadingOverlay from 'react-loading-overlay';
-
+import LoadingOverlay from "react-loading-overlay";
+import { Link } from "react-router-dom";
+import { Progress } from "react-sweet-progress";
+import "react-sweet-progress/lib/style.css";
 var mode = "weighted";
 
 class PoseNet extends Component {
   static defaultProps = {
-    videoWidth: 900,
-    videoHeight: 700,
+    videoWidth: 900, //900
+    videoHeight: 700, //700
     flipHorizontal: true,
     algorithm: "single-pose",
     showVideo: true,
@@ -40,7 +43,7 @@ class PoseNet extends Component {
 
   state = {
     loading: true
-  }
+  };
 
   getCanvas = elem => {
     this.canvas = elem;
@@ -61,7 +64,7 @@ class PoseNet extends Component {
 
     try {
       this.posenet = await posenet.load({
-       // architecture: "ResNet50" //,
+        // architecture: "ResNet50" //,
         // outputStride: 32,
         // inputResolution: { width: 257, height: 200 },
         // quantBytes: 2
@@ -84,7 +87,7 @@ class PoseNet extends Component {
     } else {
       vector = this.createVectorFromObject2(pose);
     }
-    
+
     this.setState({ imageVector: vector });
     this.detectPose();
   }
@@ -106,6 +109,8 @@ class PoseNet extends Component {
         facingMode: "user",
         width: videoWidth,
         height: videoHeight
+        // width: "100%",
+        // height: "auto"
       }
     });
 
@@ -175,7 +180,7 @@ class PoseNet extends Component {
             outputStride
           );
           const fakepose = this.state.poseFrmImg;
-        //  poses.push(fakepose);
+          //  poses.push(fakepose);
           poses.push(pose);
           this.calculateCloseness(cloneDeep(pose));
           break;
@@ -223,11 +228,15 @@ class PoseNet extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col-md-8">
-          <LoadingOverlay active={this.state.loading} spinner text={this.props.loadingText}>
-            <div className="m-2">
-              <video id="videoNoShow" playsInline ref={this.getVideo} />
-              <canvas className="webcam" ref={this.getCanvas} />
-            </div>
+            <LoadingOverlay
+              active={this.state.loading}
+              spinner
+              text={this.props.loadingText}
+            >
+              <div className="m-2">
+                <video id="videoNoShow" playsInline ref={this.getVideo} />
+                <canvas className="webcam" ref={this.getCanvas} />
+              </div>
             </LoadingOverlay>
           </div>
           <div className="col-md-4">
@@ -240,28 +249,55 @@ class PoseNet extends Component {
                   crossOrigin="anonymous"
                 />
                 <div className="card-body">
-                  <h5 className="card-title">Extended Side Angle Pose</h5>
-
-                  <p className="card-text">
-                    <i className="small">Utthita Parsvakonasana</i>
+                  <h5 className="card-title">{this.props.pose.poseName}</h5>
+                  <div className="card-text">
+                    <i className="small">{this.props.pose.sanskritName}</i>
                     <br />
-                    Find length in your side body, from your heel to your
-                    fingertips with Extended Side Angle Pose.
-                  </p>
+                    {this.props.pose.desc}
+                  </div>
                 </div>
                 <ul className="list-group list-group-flush">
+                  {this.state.percentMatch && (
+                    <li className="list-group-item">
+                      <strong>Correctness</strong>
+                      <br />
+                      {/* <div flush>{this.benefits}</div> */}
+                      <Progress
+                        type="circle"
+                        width={70}
+                        percent={Math.floor(this.state.percentMatch)}
+                      />
+                    </li>
+                  )}
                   <li className="list-group-item">
-                    oo-TEE-tah parsh-vah-cone-AHS-anna
+                    <strong>Benefits</strong>
+                    <div flush>{this.benefits}</div>
                   </li>
                   <li className="list-group-item">
+                    <strong>Difficulty</strong> <span> </span>
+                    {this.props.pose.difficulty === 1 && (
+                      <Badge color="success" pill>
+                        Easy
+                      </Badge>
+                    )}
+                    {this.props.pose.difficulty === 2 && (
+                      <Badge color="warning" pill>
+                        Medium
+                      </Badge>
+                    )}
+                    {this.props.pose.difficulty === 3 && (
+                      <Badge color="danger" pill>
+                        Hard
+                      </Badge>
+                    )}
+                    <div flush>{this.difficulty}</div>
+                  </li>
+                  {/* <li className="list-group-item">
                     {this.state && this.state.closeness}
-                  </li>
-                  <li className="list-group-item">Score</li>
+                  </li> */}
                 </ul>
                 <div className="card-body">
-                  <a href="#" className="card-link">
-                    Go to Next Pose
-                  </a>
+                  <Link to="/">Home</Link>
                 </div>
               </div>
             </div>
@@ -286,6 +322,15 @@ class PoseNet extends Component {
 
   //added by Harshraj
 
+  benefits = this.props.pose.benefits.map(item => (
+    <React.Fragment>
+      <Badge color="info" pill>
+        {item}
+      </Badge>
+      <span> </span>
+    </React.Fragment>
+  ));
+
   calculateCloseness(pose) {
     //console.log("test", pose);
     var videoVector = null;
@@ -302,9 +347,11 @@ class PoseNet extends Component {
         closeness = this.cosineDistanceMatching(videoVector, imageVector);
       } else {
         closeness = this.weightedDistanceMatching(videoVector, imageVector);
-      }   
+      }
       this.setState({ closeness });
     }
+
+    this.setState({ percentMatch: 100 - closeness * 100 });
   }
 
   // handPoseFromImage = pose => {
@@ -373,11 +420,11 @@ class PoseNet extends Component {
   normalizeVector(poseVector) {
     //deep copy and return
     let normalized = cloneDeep(poseVector);
-    var l2norm = require( 'compute-l2norm' );
-    for (var i=0; i <normalized.length; i+=2) {
-      var norm = l2norm([normalized[i],normalized[i+1]]);
-      normalized[i] = normalized[i]/norm;
-      normalized[i+1] = normalized[i+1]/norm;
+    var l2norm = require("compute-l2norm");
+    for (var i = 0; i < normalized.length; i += 2) {
+      var norm = l2norm([normalized[i], normalized[i + 1]]);
+      normalized[i] = normalized[i] / norm;
+      normalized[i + 1] = normalized[i + 1] / norm;
     }
     return normalized;
   }
