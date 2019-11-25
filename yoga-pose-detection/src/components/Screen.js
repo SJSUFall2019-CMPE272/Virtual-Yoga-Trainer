@@ -78,29 +78,24 @@ class Screen extends Component {
   
 
   componentDidMount() {
-      
-        const admin = require('firebase-admin');
-        
-        admin.initializeApp({ credential: admin.credential.applicationDefault()});
-        const db = admin.firestore();
-        if (firebase.auth.currrentUser != null)
-        {
-        firebase.auth.currrentUser.getIdToken();
-
-        //var userId = firebase.auth().currentUser.uuid;
-        let posesRef = db.collection('poses');
-        let allPoses = posesRef.get().then(snapshot => {
+        const db = firebase.firestore();
+        var posesRef = db.collection('poses');
+        console.log("Here "+ posesRef);
+        var allPoses = posesRef.get().then(snapshot => {
+            var previous = this.state.items;
             snapshot.forEach(pose => {
               console.log(pose.id, '=>', pose.data());
+              previous.push(pose.data());
             });
-          })
+            this.setState({items: previous});
+            //console.log("Here "+this.state.items);
+          }
+          )
           .catch(err => {
             console.log('Error getting documents', err);
           });
-        }
-       // const items = res.data;
-        //console.log(items);
-        //this.setState({ items });
+        
+        //this.render();
     
   }
 
@@ -108,16 +103,18 @@ class Screen extends Component {
     console.log("State : " + this.state.items);
     return (
       <Container fluid>
-      
         <Row>
-          {this.state.items.map(item => (
-            <Item
-              item={item}
-              onClickDescription={this.handleOnClickDescription}
-            //  onClickStartPractice = {this.handleOnClickStartPractice}
-              on
-            />
-          ))}
+          { this.state.items && this.state.items.length ? this.state.items.map(item =>{
+            console.log(item)
+            return (
+              <Item
+                item={item}
+                onClickDescription={this.handleOnClickDescription}
+              //  onClickStartPractice = {this.handleOnClickStartPractice}
+              />
+            )
+          }): null}
+            
         </Row>
         
       </Container>

@@ -1,5 +1,6 @@
 import React from "react";
 import fire from '../config/fire';
+import Screen from './Screen';
 import {
     BrowserRouter as Router,
     Switch,
@@ -24,7 +25,9 @@ class Home extends React.Component {
                 <Switch>
                     <Route path="/practice" component={Practice}></Route>
                 <Route path="/" ><div className="col-md-6">
-                <h1>You are home</h1><button onClick={this.logout}>Logout</button>
+                <h1>You are home</h1>
+                <Screen></Screen>
+                <button onClick={this.logout}>Logout</button>
             </div></Route>
                 </Switch>
                 </Router>
