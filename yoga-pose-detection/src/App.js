@@ -27,7 +27,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <React.Fragment>{this.state.user ? <Home /> : <Login />}</React.Fragment>
+      <div className="App">{this.state.user ? <Screen /> : <Login />}</div>
     );
   }
 }
