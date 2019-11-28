@@ -13,6 +13,7 @@
     "firebase-admin": "^8.8.0",
     "http2": "^3.3.7",
     "lodash": "^4.17.15",
+    "mdbreact": "^4.23.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-loading-overlay": "^1.0.1",
