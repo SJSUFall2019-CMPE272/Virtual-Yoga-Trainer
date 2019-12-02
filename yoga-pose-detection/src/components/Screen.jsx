@@ -6,7 +6,6 @@ import firebase from 'firebase'
 import fire from '../config/fire'
 import { Card, CardImg, CardText, CardBody, CardTitle, Button } from "reactstrap";
 import Header from './Header.js'
-import { Redirect } from "react-router-dom";
 
 import {
   Row,
@@ -23,9 +22,6 @@ import ModalExample from "./modal";
 
 
 class Item extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     console.log(this.props);

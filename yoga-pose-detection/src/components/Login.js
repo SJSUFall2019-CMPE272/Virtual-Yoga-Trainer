@@ -29,7 +29,12 @@ class Login extends React.Component {
     fire
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(u => { localStorage.setItem('user', u); this.setState({loggedin: true})})
+      .then(u => { localStorage.setItem('user', u);
+      var user = fire.auth().currentUser;
+      localStorage.setItem('name', user.email);
+      localStorage.setItem('email', user.email);
+      localStorage.setItem('photoURL', "https://southernautomotivegroup.com.au/wp-content/uploads/2015/04/generic-placeholder-person.png");
+      this.setState({loggedin: true})})
       .catch(error => {
         console.log(error);
       });
@@ -42,7 +47,12 @@ class Login extends React.Component {
       .signInWithPopup(this.provider)
       .then((result) => {
         console.log(result);
-        localStorage.setItem('user', fire.auth().currentUser); this.setState({loggedin: true});
+        localStorage.setItem('user', fire.auth().currentUser);
+        var user = fire.auth().currentUser;
+        localStorage.setItem('name', user.displayName);
+        localStorage.setItem('email', user.email);
+        localStorage.setItem('photoURL', user.photoURL);
+        this.setState({loggedin: true});
       })
       .catch(error => {
         console.log(error);

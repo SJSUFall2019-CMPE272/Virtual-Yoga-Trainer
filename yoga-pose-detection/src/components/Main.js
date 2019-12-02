@@ -11,7 +11,6 @@ class Main extends Component {
   render() {
     return (
       <div>
-        <Route path="/" component={Login}/>
         <Route path="/screen" component={Screen} />
         <Route path="/header" component={Header} />
         <Route path="/practice" component={Practice} />

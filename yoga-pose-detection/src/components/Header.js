@@ -31,6 +31,9 @@ class Header extends Component {
   logout = () => {
     fire.auth().signOut().then(()=> {
         localStorage.removeItem('user');
+        localStorage.removeItem('name');
+        localStorage.removeItem('email');
+        localStorage.removeItem('photoURL');
         this.setState({user: false});
         this.setState({redirectToLogin: true});
         console.log("Redirecting");
@@ -39,13 +42,15 @@ class Header extends Component {
 
   render() {
       const user = localStorage.getItem('user');
+      console.log("at header -> user", user);
     return (
         <div>
           { user == null && ( <Redirect
             to={{
               pathname: "/login"
             }}
-          />) }
+          />) 
+          }
         {this.state.redirectToLogin && (
           <Redirect
             to={{
