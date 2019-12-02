@@ -5,6 +5,8 @@ import { MDBBtn, MDBIcon } from "mdbreact";
 import firebase from 'firebase'
 import fire from '../config/fire'
 import { Card, CardImg, CardText, CardBody, CardTitle, Button } from "reactstrap";
+import Header from './Header.js'
+import { Redirect } from "react-router-dom";
 
 import {
   Row,
@@ -110,21 +112,21 @@ class Screen extends Component {
   render() {
     console.log("State : " + this.state.items);
     return (
+      <React.Fragment>
+      <Header></Header>
       <Container fluid>
         <Row>
           { this.state.items && this.state.items.length ? this.state.items.map(item =>{
             console.log(item)
             return (
               <Item
-                item={item}
-               
+                item={item} 
               />
             )
-          }): null}
-            
+          }): null}            
         </Row>
-        
       </Container>
+      </React.Fragment>
     );
   }
 }
