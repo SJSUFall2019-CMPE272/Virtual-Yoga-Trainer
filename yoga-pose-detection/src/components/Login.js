@@ -15,7 +15,7 @@ import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
 import { Container, Row, Col } from "reactstrap";
 import { Media } from "reactstrap";
 import Logo from "../logo.jpg";
-import { Redirect } from "react-router-dom";  
+import { Redirect } from "react-router-dom";
 
 class Login extends React.Component {
   state = {
@@ -60,7 +60,7 @@ class Login extends React.Component {
     return (
       <div>
   {  user !=undefined  && <Redirect to={{ pathname: "/dashboard" }} /> }
-  { user == undefined &&  
+  { user == undefined &&
         <Container style={{ paddingTop: "20px" }}>
           <Row>
             <Col></Col>
