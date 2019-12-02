@@ -3,6 +3,7 @@ import { NavItem, NavLink } from "reactstrap";
 import { Redirect } from "react-router-dom";
 import { browserHistory } from "react-router";
 import fire from "../config/fire";
+import './Header.css';
 
 import {
   Navbar,
@@ -29,6 +30,7 @@ class Header extends Component {
 
   logout = () => {
     fire.auth().signOut().then(()=> {
+        localStorage.removeItem('user');
         this.setState({user: false});
         this.setState({redirectToLogin: true});
         console.log("Redirecting");
@@ -36,8 +38,14 @@ class Header extends Component {
   };
 
   render() {
+      const user = localStorage.getItem('user');
     return (
-      <React.Fragment>
+        <div>
+          { user == null && ( <Redirect
+            to={{
+              pathname: "/login"
+            }}
+          />) }
         {this.state.redirectToLogin && (
           <Redirect
             to={{
@@ -45,7 +53,7 @@ class Header extends Component {
             }}
           />
         )}
-        <div className="header">
+        {user != null && this.state.redirectToLogin == false && (<div className="header">
           <Navbar color="" light expand="md">
             <h1 style={{ color: "red" }}>
               <span className="font-weight-bold">Yogi</span>
@@ -55,7 +63,7 @@ class Header extends Component {
                 <NavLink href="/dashboard">Dashboard</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="/poses">Poses</NavLink>
+                <NavLink href="/screen">Poses</NavLink>
               </NavItem>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret onClick={this.getCartItems}>
@@ -71,8 +79,8 @@ class Header extends Component {
               </UncontrolledDropdown>
             </Nav>
           </Navbar>
+        </div>)}
         </div>
-      </React.Fragment>
     );
   }
 }

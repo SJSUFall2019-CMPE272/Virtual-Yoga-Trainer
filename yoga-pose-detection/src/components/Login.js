@@ -19,6 +19,7 @@ import { Redirect } from "react-router-dom";
 
 class Login extends React.Component {
   state = {
+    loggedin: false,
     email: "",
     password: ""
   };
@@ -28,7 +29,7 @@ class Login extends React.Component {
     fire
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(u => {})
+      .then(u => { localStorage.setItem('user', u); this.setState({loggedin: true})})
       .catch(error => {
         console.log(error);
       });
@@ -39,8 +40,9 @@ class Login extends React.Component {
     fire
       .auth()
       .signInWithPopup(this.provider)
-      .then(function(result) {
+      .then((result) => {
         console.log(result);
+        localStorage.setItem('user', fire.auth().currentUser); this.setState({loggedin: true});
       })
       .catch(error => {
         console.log(error);
@@ -52,11 +54,13 @@ class Login extends React.Component {
   }
 
   render() {
-    const user= fire.auth().currentUser;
+    console.log("At login page");
+    const user = localStorage.getItem('user');
+    console.log(this.state.user);
     return (
       <div>
-  {  user == true && <Redirect to={{ pathname: "/dashboard" }} /> }
-  { user == false &&  
+  {  user !=undefined  && <Redirect to={{ pathname: "/dashboard" }} /> }
+  { user == undefined &&  
         <Container style={{ paddingTop: "20px" }}>
           <Row>
             <Col></Col>
