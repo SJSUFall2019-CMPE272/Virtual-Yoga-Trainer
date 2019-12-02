@@ -21,6 +21,7 @@ import {
 import ModalExample from "./modal";
 
 
+
 class Item extends Component {
 
   render() {
@@ -29,7 +30,8 @@ class Item extends Component {
     return (
       <Col sm="3">
         <React.Fragment>
-          <Card className="box">
+          <Card className="box" onClick={()=>this.props.onAddToCartClicked(this.props.item)}>
+          
             <CardImg
               class="card-img-top"
               top
@@ -63,6 +65,7 @@ class Item extends Component {
                 item={this.props.item}
                 
               />  
+              
             </CardBody>
           </Card>
         </React.Fragment>
@@ -76,11 +79,18 @@ class Item extends Component {
 
 class Screen extends Component {
   state = {
-    items: []
+    items: [],
+    selectedPose: {}
+    
   };
 
   
-
+  handleAddToCartClicked = (item) => {
+    console.log("selected", item);
+    this.setState({selectedPose:item});
+    //Post to cart
+    
+  };
   
 
   componentDidMount() {
@@ -116,7 +126,8 @@ class Screen extends Component {
             console.log(item)
             return (
               <Item
-                item={item} 
+                item={item}
+                onAddToCartClicked={this.handleAddToCartClicked}
               />
             )
           }): null}            
