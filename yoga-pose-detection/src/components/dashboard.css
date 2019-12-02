@@ -34,6 +34,10 @@
  color: #7cf;
 }
 
+.img{
+  border-radius: 15px;
+}
+
 /* Position and style the close button (top right corner) */
 .sidebar .closebtn {
  position: absolute;
