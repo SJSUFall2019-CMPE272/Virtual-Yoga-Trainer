@@ -12,22 +12,18 @@ const ModalExample = props => {
 
   return (
     <div>
-      <Button color="primary" onClick={toggle}>
+      <Button outline color="info" onClick={toggle} block>
         {buttonLabel}
       </Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
-        
         <ModalBody>
-         {"  "}
-          {item.desc
-                }
-          
+          {"  "}
+          {item.desc}
         </ModalBody>
         <ModalFooter>
           <Button
             color="danger"
             onClick={() => {
-              
               toggle();
             }}
           >
