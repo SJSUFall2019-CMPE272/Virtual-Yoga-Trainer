@@ -268,7 +268,7 @@ class PoseNet extends Component {
                 <div className="card">
                   <img
                     id="yogaPose"
-                    src={imgSrc}
+                    src={chairPoseImg}
                     //crossOrigin="f"
                     className="card-img-top"
                   />
