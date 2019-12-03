@@ -18,6 +18,7 @@ class Main extends Component {
   handleAddToCartClicked = item => {
     console.log("selected", item);
     this.setState({ selectedPose: item });
+    localStorage.setItem('selectedPose', JSON.stringify(item));
     //Post to cart
   };
 

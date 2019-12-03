@@ -225,14 +225,16 @@ class PoseNet extends Component {
   }
 
   render() {
-    const {
-      poseName,
-      benefits,
-      difficulty,
-      desc,
-      imgSrc,
-      sanskritName
-    } = this.props.selectedPose;
+    var retrievedObject = JSON.parse(localStorage.getItem('selectedPose'));
+    //console.log('retrievedObject: ', JSON.parse(retrievedObject));
+    const benefits = retrievedObject.benefits;
+    const poseName = retrievedObject.poseName;
+    const difficulty = retrievedObject.difficulty;
+    const sanskritName = retrievedObject.sanskritName;
+    const desc = retrievedObject.desc;
+
+    console.log("posename : "+ poseName);
+
 
     return (
       <div className="container-fluid">
@@ -332,14 +334,14 @@ class PoseNet extends Component {
 
   //added by Harshraj
 
-  benefits = this.props.selectedPose.benefits.map(item => (
+ /* benefits = this.props.selectedPose.benefits.map(item => (
     <React.Fragment>
       <Badge color="info" pill>
         {item}
       </Badge>
       <span> </span>
     </React.Fragment>
-  ));
+  )); */
 
   calculateCloseness(pose) {
     //console.log("test", pose);

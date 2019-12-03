@@ -85,6 +85,10 @@ class Screen extends Component {
   //   selectedPose: ""
   // };
 
+  handleSelection = () => {
+    console.log("Here in hanlde")
+  }
+
   render() {
     const { items, selectedPose } = this.props;
     console.log("props - screen" + this.props);
@@ -119,7 +123,7 @@ class Screen extends Component {
             <ButtonFab
               tooltip="Launch Pose Tracker"
               icon="fas fa-play"
-              onClick={() => <PoseNet pose={selectedPose} />}
+              onClick={this.handleSelection}
             />
           )}
         </ContanerFab>
