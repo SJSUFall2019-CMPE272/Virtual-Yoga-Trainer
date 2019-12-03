@@ -1,6 +1,7 @@
 import React from "react";
 import firebase from "firebase";
 import fire from "../config/fire";
+import { UncontrolledAlert } from 'reactstrap';
 import {
   Card,
   CardImg,
@@ -21,10 +22,12 @@ class Login extends React.Component {
   state = {
     loggedin: false,
     email: "",
-    password: ""
+    password: "",
+    loginerror: false
   };
   provider = new firebase.auth.GoogleAuthProvider();
   login(e) {
+    this.setState({loginerror: false});
     e.preventDefault();
     fire
       .auth()
@@ -36,12 +39,14 @@ class Login extends React.Component {
       localStorage.setItem('photoURL', "https://southernautomotivegroup.com.au/wp-content/uploads/2015/04/generic-placeholder-person.png");
       this.setState({loggedin: true})})
       .catch(error => {
+        this.setState({loginerror: error.message})
         console.log(error);
       });
   }
 
   login_google(e) {
     e.preventDefault();
+    this.setState({loginerror: false});
     fire
       .auth()
       .signInWithPopup(this.provider)
@@ -56,6 +61,7 @@ class Login extends React.Component {
       })
       .catch(error => {
         console.log(error);
+        this.setState({loginerror: error.message})
       });
   }
 
@@ -151,6 +157,9 @@ class Login extends React.Component {
                   Sign in with Google
                 </Button>
               </Row>
+              { this.state.loginerror && <UncontrolledAlert color="danger">
+      { this.state.loginerror}
+    </UncontrolledAlert> }
             </Col>
             <Col></Col>
           </Row>
