@@ -38,10 +38,10 @@ class Item extends Component {
     console.log(this.props);
 
     return (
-      <Col sm="3">
+      <Col sm="4">
         <React.Fragment>
           <Card
-            className="box"
+            className="box m-3"
             onClick={() => this.props.onAddToCartClicked(this.props.item)}
           >
             <CardImg
@@ -141,15 +141,6 @@ class Screen extends Component {
               icon="fas fa-play"
             />
           )}
-          {/* <Link href="#" tooltip="Add user link" icon="fas fa-user-plus" />
-          className="fab-item btn btn-link btn-lg text-white" */}
-          {/* {selectedPose && (
-            <ButtonFab
-              tooltip="Launch Pose Tracker"
-              icon="fas fa-play"
-              onClick={this.handleSelection}
-            />
-          )} */}
         </ContanerFab>
       </React.Fragment>
     );

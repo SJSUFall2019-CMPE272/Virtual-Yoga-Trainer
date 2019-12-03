@@ -9,6 +9,7 @@ import LoadingOverlay from "react-loading-overlay";
 import { Link } from "react-router-dom";
 import { Progress } from "react-sweet-progress";
 import "react-sweet-progress/lib/style.css";
+import Header from "./Header";
 var mode = "weighted";
 
 class PoseNet extends Component {
@@ -235,55 +236,58 @@ class PoseNet extends Component {
     // console.log("posename : " + poseName);
 
     return (
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-8">
-            <LoadingOverlay
-              active={this.state.loading}
-              spinner
-              text={this.props.loadingText}
-            >
-              <div className="m-2">
-                <video id="videoNoShow" playsInline ref={this.getVideo} />
-                <canvas className="webcam" ref={this.getCanvas} />
-              </div>
-            </LoadingOverlay>
-          </div>
-          <div className="col-md-4">
-            <div className="m-3">
-              <div className="card">
-                <img
-                  id="yogaPose"
-                  src={imagePath}
-                  className="card-img-top"
-                  crossOrigin="anonymous"
-                />
-                <div className="card-body">
-                  {/* <h5 className="card-title">{poseName}</h5> */}
-                  <div className="card-text">
-                    {/* <i className="small">{sanskritName}</i> */}
-                    <br />
-                    {/* {desc} */}
-                  </div>
+      <React.Fragment>
+        <Header />
+
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-8">
+              <LoadingOverlay
+                active={this.state.loading}
+                spinner
+                text={this.props.loadingText}
+              >
+                <div className="m-2">
+                  <video id="videoNoShow" playsInline ref={this.getVideo} />
+                  <canvas className="webcam" ref={this.getCanvas} />
                 </div>
-                <ul className="list-group list-group-flush">
-                  {this.state.percentMatch && (
-                    <li className="list-group-item">
-                      <strong>Correctness</strong>
+              </LoadingOverlay>
+            </div>
+            <div className="col-md-4">
+              <div className="m-3">
+                <div className="card">
+                  <img
+                    id="yogaPose"
+                    src={imagePath}
+                    className="card-img-top"
+                    crossOrigin="anonymous"
+                  />
+                  <div className="card-body">
+                    {/* <h5 className="card-title">{poseName}</h5> */}
+                    <div className="card-text">
+                      {/* <i className="small">{sanskritName}</i> */}
                       <br />
-                      {/* <div flush>{this.benefits}</div> */}
-                      <Progress
-                        type="circle"
-                        width={70}
-                        percent={Math.floor(this.state.percentMatch)}
-                      />
+                      {/* {desc} */}
+                    </div>
+                  </div>
+                  <ul className="list-group list-group-flush">
+                    {this.state.percentMatch && (
+                      <li className="list-group-item">
+                        <strong>Correctness</strong>
+                        <br />
+                        {/* <div flush>{this.benefits}</div> */}
+                        <Progress
+                          type="circle"
+                          width={70}
+                          percent={Math.floor(this.state.percentMatch)}
+                        />
+                      </li>
+                    )}
+                    <li className="list-group-item">
+                      <strong>Benefits</strong>
+                      {/* <div flush>{benefits}</div> */}
                     </li>
-                  )}
-                  <li className="list-group-item">
-                    <strong>Benefits</strong>
-                    {/* <div flush>{benefits}</div> */}
-                  </li>
-                  {/* <li className="list-group-item">
+                    {/* <li className="list-group-item">
                     <strong>Difficulty</strong> <span> </span>
                     {difficulty === 1 && (
                       <Badge color="success" pill>
@@ -302,18 +306,19 @@ class PoseNet extends Component {
                     )}
                     <div flush>{this.difficulty}</div>
                   </li> */}
-                  {/* <li className="list-group-item">
+                    {/* <li className="list-group-item">
                     {this.state && this.state.closeness}
                   </li> */}
-                </ul>
-                <div className="card-body">
-                  <Link to="/">Home</Link>
+                  </ul>
+                  <div className="card-body">
+                    <Link to="/">Home</Link>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 
