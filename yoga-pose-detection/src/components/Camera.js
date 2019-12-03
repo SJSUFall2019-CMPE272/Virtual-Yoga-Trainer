@@ -38,7 +38,7 @@ class PoseNet extends Component {
   };
 
   constructor(props) {
-    console.log("props", props);
+    //console.log("props", props);
     super(props, PoseNet.defaultProps);
   }
 
@@ -225,16 +225,14 @@ class PoseNet extends Component {
   }
 
   render() {
-    var retrievedObject = JSON.parse(localStorage.getItem('selectedPose'));
-    //console.log('retrievedObject: ', JSON.parse(retrievedObject));
-    const benefits = retrievedObject.benefits;
-    const poseName = retrievedObject.poseName;
-    const difficulty = retrievedObject.difficulty;
-    const sanskritName = retrievedObject.sanskritName;
-    const desc = retrievedObject.desc;
+    // var retrievedObject = JSON.parse(localStorage.getItem("selectedPose"));
+    // const benefits = retrievedObject.benefits;
+    // const poseName = retrievedObject.poseName;
+    // const difficulty = retrievedObject.difficulty;
+    // const sanskritName = retrievedObject.sanskritName;
+    // const desc = retrievedObject.desc;
 
-    console.log("posename : "+ poseName);
-
+    // console.log("posename : " + poseName);
 
     return (
       <div className="container-fluid">
@@ -261,11 +259,11 @@ class PoseNet extends Component {
                   crossOrigin="anonymous"
                 />
                 <div className="card-body">
-                  <h5 className="card-title">{poseName}</h5>
+                  {/* <h5 className="card-title">{poseName}</h5> */}
                   <div className="card-text">
-                    <i className="small">{sanskritName}</i>
+                    {/* <i className="small">{sanskritName}</i> */}
                     <br />
-                    {desc}
+                    {/* {desc} */}
                   </div>
                 </div>
                 <ul className="list-group list-group-flush">
@@ -285,7 +283,7 @@ class PoseNet extends Component {
                     <strong>Benefits</strong>
                     {/* <div flush>{benefits}</div> */}
                   </li>
-                  <li className="list-group-item">
+                  {/* <li className="list-group-item">
                     <strong>Difficulty</strong> <span> </span>
                     {difficulty === 1 && (
                       <Badge color="success" pill>
@@ -303,7 +301,7 @@ class PoseNet extends Component {
                       </Badge>
                     )}
                     <div flush>{this.difficulty}</div>
-                  </li>
+                  </li> */}
                   {/* <li className="list-group-item">
                     {this.state && this.state.closeness}
                   </li> */}
@@ -315,26 +313,13 @@ class PoseNet extends Component {
             </div>
           </div>
         </div>
-        {/* {this.state.poseFrmImg !== null && (
-          <p className="small">{JSON.stringify(this.state.poseFrmImg)}</p>
-        )}
-        <p className="small">{JSON.stringify(this.state.imageVector)}</p>
-        <p className="small">{JSON.stringify(this.state.poseFrmVideo)}</p>
-        <p className="small">{JSON.stringify(this.state.videoVector)}</p>
-        <p className="small">{JSON.stringify(this.state.closeness)}</p> */}
       </div>
-      // <div>
-      //   <div>
-      //     <video id="videoNoShow" playsInline ref={this.getVideo} />
-      //     <canvas className="webcam" ref={this.getCanvas} />
-      //   </div>
-      // </div>
     );
   }
 
   //added by Harshraj
 
- /* benefits = this.props.selectedPose.benefits.map(item => (
+  /* benefits = this.props.selectedPose.benefits.map(item => (
     <React.Fragment>
       <Badge color="info" pill>
         {item}

@@ -80,31 +80,53 @@ class Item extends Component {
 }
 
 class Screen extends Component {
-  // state = {
-  //   items: [],
-  //   selectedPose: ""
-  // };
+  state = {
+    items: [],
+    selectedPose: ""
+  };
 
-  handleSelection = () => {
-    console.log("Here in hanlde")
+  handleAddToCartClicked = item => {
+    console.log("selected", item);
+    this.setState({ selectedPose: item });
+    localStorage.setItem("selectedPose", JSON.stringify(item));
+    //Post to cart
+  };
+
+  componentDidMount() {
+    const db = firebase.firestore();
+    var posesRef = db.collection("poses");
+    console.log("Here " + posesRef);
+    var allPoses = posesRef
+      .get()
+      .then(snapshot => {
+        var previous = this.state.items;
+        snapshot.forEach(pose => {
+          console.log(pose.id, "=>", pose.data());
+          previous.push(pose);
+        });
+        this.setState({ items: previous });
+        console.log("previous", previous);
+      })
+      .catch(err => {
+        console.log("Error getting documents", err);
+      });
   }
 
   render() {
-    const { items, selectedPose } = this.props;
-    console.log("props - screen" + this.props);
+    console.log("items : ", this.state.items);
     return (
       <React.Fragment>
         <Header></Header>
         <Container>
           <Row className="m-3">
-            {items && items.length
-              ? items.map(item => {
+            {this.state.items && this.state.items.length
+              ? this.state.items.map(item => {
                   console.log(item.id);
                   return (
                     <Item
                       key={item.id}
                       item={item.data()}
-                      onAddToCartClicked={this.props.onAddToCartClicked}
+                      onAddToCartClicked={this.handleAddToCartClicked}
                     />
                   );
                 })
@@ -112,20 +134,22 @@ class Screen extends Component {
           </Row>
         </Container>
         <ContanerFab>
-          <Link
-            href="/practice"
-            tooltip="Create note link"
-            icon="far fa-sticky-note"
-          />
+          {localStorage.getItem("selectedPose") && (
+            <Link
+              href="/practice"
+              tooltip="Launch Pose Tracker"
+              icon="fas fa-play"
+            />
+          )}
           {/* <Link href="#" tooltip="Add user link" icon="fas fa-user-plus" />
           className="fab-item btn btn-link btn-lg text-white" */}
-          {selectedPose && (
+          {/* {selectedPose && (
             <ButtonFab
               tooltip="Launch Pose Tracker"
               icon="fas fa-play"
               onClick={this.handleSelection}
             />
-          )}
+          )} */}
         </ContanerFab>
       </React.Fragment>
     );
