@@ -17,36 +17,53 @@ class Dashboard extends Component {
 
   componentDidMount(){
     console.log('at dashboard');
-    var user = firebase.auth().currentUser;
-    var email;
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-      console.log('user found');
-      email = user.email;
-      var docRef = firebase.firestore().collection("userData").where("email", "==", email)
-      .get()
-      .then(function(querySnapshot) {
-            querySnapshot.forEach(function(doc) {
-                // doc.data() is never undefined for query doc snapshots
-                localStorage.setItem('newUser', false);
-                console.log("newUser set to false = ", localStorage.getItem('newUser'));
-                console.log(doc.id, " => ", doc.data());
-            });
-        })
-        .catch(function(error) {
-            console.log("Error getting documents: ", error);
+    firebase.firestore().collection("userData").where("email", "==", localStorage.getItem('email')).get().then(
+      function(querySnapshot) {
+        console.log("Inside querysnapshot",querySnapshot);
+        var nw = true;
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            nw = false;
+            console.log("User exists")
+            console.log(doc.id, " => ", doc.data());
         });
-        if(localStorage.getItem('newUser') != false){
-          console.log("new user data added");
-          console.log("newUser = ", localStorage.getItem('newUser'));
-          firebase.firestore().collection("userData").add({
-            email: email
-          })
+        if (nw){
+          console.log("New user");
+            //Assuming new user so inserting stuff
+            var today = new Date();
+            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+ ' ' + today.getUTCHours() + ':' + today.getUTCMinutes() + ':' + today.getUTCSeconds();
+            let newUser = {
+              email: localStorage.getItem('email'),
+              lastLogin: date,
+              name: localStorage.getItem('name'),
+              poseHistory: {},
+              posesCompleted: [],
+              totalUsage: 1,
+              userImg: localStorage.getItem('photoURL')
+            };
+            firebase.firestore().collection('userData').doc(localStorage.getItem('email')).set(newUser);
+            console.log("Created new entry for user");
         }
-      } else {
-        // No user is signed in.
       }
-    });
+    ).catch(
+      function(error) {
+        console.log("New user");
+            //Assuming new user so inserting stuff
+            var today = new Date();
+            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+            let newUser = {
+              email: localStorage.getItem('email'),
+              lastLogin: date,
+              name: localStorage.getItem('name'),
+              poseHistory: {},
+              posesCompleted: [],
+              totalUsage: 1,
+              userImg: localStorage.getItem('photoURL')
+            };
+            firebase.firestore().collection('userData').doc(localStorage.getItem('email')).set(newUser);
+            console.log("Created new entry for user");
+      }
+    );
 }
 
   render() {
