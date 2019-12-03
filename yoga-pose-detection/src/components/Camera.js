@@ -38,6 +38,7 @@ class PoseNet extends Component {
   };
 
   constructor(props) {
+    console.log("props", props);
     super(props, PoseNet.defaultProps);
   }
 
@@ -224,6 +225,15 @@ class PoseNet extends Component {
   }
 
   render() {
+    const {
+      poseName,
+      benefits,
+      difficulty,
+      desc,
+      imgSrc,
+      sanskritName
+    } = this.props.selectedPose;
+
     return (
       <div className="container-fluid">
         <div className="row">
@@ -249,11 +259,11 @@ class PoseNet extends Component {
                   crossOrigin="anonymous"
                 />
                 <div className="card-body">
-                  <h5 className="card-title">{this.props.pose.poseName}</h5>
+                  <h5 className="card-title">{poseName}</h5>
                   <div className="card-text">
-                    <i className="small">{this.props.pose.sanskritName}</i>
+                    <i className="small">{sanskritName}</i>
                     <br />
-                    {this.props.pose.desc}
+                    {desc}
                   </div>
                 </div>
                 <ul className="list-group list-group-flush">
@@ -271,21 +281,21 @@ class PoseNet extends Component {
                   )}
                   <li className="list-group-item">
                     <strong>Benefits</strong>
-                    <div flush>{this.benefits}</div>
+                    {/* <div flush>{benefits}</div> */}
                   </li>
                   <li className="list-group-item">
                     <strong>Difficulty</strong> <span> </span>
-                    {this.props.pose.difficulty === 1 && (
+                    {difficulty === 1 && (
                       <Badge color="success" pill>
                         Easy
                       </Badge>
                     )}
-                    {this.props.pose.difficulty === 2 && (
+                    {difficulty === 2 && (
                       <Badge color="warning" pill>
                         Medium
                       </Badge>
                     )}
-                    {this.props.pose.difficulty === 3 && (
+                    {difficulty === 3 && (
                       <Badge color="danger" pill>
                         Hard
                       </Badge>
@@ -322,7 +332,7 @@ class PoseNet extends Component {
 
   //added by Harshraj
 
-  benefits = this.props.pose.benefits.map(item => (
+  benefits = this.props.selectedPose.benefits.map(item => (
     <React.Fragment>
       <Badge color="info" pill>
         {item}
