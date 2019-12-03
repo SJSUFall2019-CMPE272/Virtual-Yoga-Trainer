@@ -70,18 +70,9 @@ class Header extends Component {
               <NavItem>
                 <NavLink href="/screen">Poses</NavLink>
               </NavItem>
-              <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret onClick={this.getCartItems}>
-                  Options
-                </DropdownToggle>
-                <DropdownMenu right>
-                  <DropdownItem>
-                    <Button onClick={() => this.logout()} color="success">
-                      SignOut
-                    </Button>
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
+              <NavItem>
+                <NavLink onClick={() => this.logout()}>Logout</NavLink>
+              </NavItem>
             </Nav>
           </Navbar>
         </div>)}
