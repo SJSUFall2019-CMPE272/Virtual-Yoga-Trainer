@@ -15,29 +15,34 @@ class Dashboard extends Component {
     user: localStorage.getItem('user')
   }
 
-  componentWillMount(){
+  componentDidMount(){
     console.log('at dashboard');
     var user = firebase.auth().currentUser;
-    var name, email, photoUrl, uid, emailVerified;
+    var email;
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
       console.log('user found');
-      name = user.displayName;
       email = user.email;
-      photoUrl = user.photoURL;
-      emailVerified = user.emailVerified;
-      uid = user.uid;
       var docRef = firebase.firestore().collection("userData").where("email", "==", email)
       .get()
       .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // doc.data() is never undefined for query doc snapshots
+                localStorage.setItem('newUser', false);
+                console.log("newUser set to false = ", localStorage.getItem('newUser'));
                 console.log(doc.id, " => ", doc.data());
             });
         })
         .catch(function(error) {
             console.log("Error getting documents: ", error);
         });
+        if(localStorage.getItem('newUser') != false){
+          console.log("new user data added");
+          console.log("newUser = ", localStorage.getItem('newUser'));
+          firebase.firestore().collection("userData").add({
+            email: email
+          })
+        }
       } else {
         // No user is signed in.
       }
