@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Media } from 'reactstrap';
+import { Pie } from "react-chartjs-2";
+import { MDBContainer } from "mdbreact";
+import {
+  Card, CardImg, CardText, CardBody,
+  CardTitle, CardSubtitle, Button
+} from 'reactstrap';
 import Header from './Header'
 import firebase from "firebase";    //firebase auth
 
@@ -13,7 +19,23 @@ class Dashboard extends Component {
     lastLogin: "",
     totalUsage: 0,
     posesCompleted: [],
-    poseHistory: {}
+    poseHistory: {},
+    dataPie: {
+      labels: ["Completed", "Incomplete"],
+      datasets: [
+        {
+          data: [],
+          backgroundColor: [
+            "#46BFBD",
+            "#F7464A"
+          ],
+          hoverBackgroundColor: [
+            "#5AD3D1",
+            "#FF5A5E"
+          ]
+        }
+      ]
+    }
   }
   props = {
     user: localStorage.getItem('user')
@@ -30,7 +52,15 @@ class Dashboard extends Component {
             nw = false;
             console.log("User exists")
             console.log(doc.id, " => ", doc.data());
+            var usage = doc.data().totalUsage;
             this.setState({loaded: true, lastLogin: doc.data().lastLogin, totalUsage: doc.data().totalUsage });
+            var dataPie = {...this.state.dataPie};
+            dataPie.datasets[0].data.push(usage);
+            dataPie.datasets[0].data.push(10 - usage);
+            console.log(dataPie.datasets[0].data);
+            this.setState({dataPie: dataPie})
+            //poses completed
+            this.setState({posesCompleted: doc.data().posesCompleted, poseHistory: doc.data().poseHistory});
         });
         if (nw){
           console.log("New user");
@@ -65,23 +95,39 @@ class Dashboard extends Component {
         <Header></Header>
         <div className="dashboard">
         <Container>
-          <Row style= {{ padding: '60px'}}>
-            <Col className="col1" style= {{ alignItems: 'right'}}>
-            <Row style= {{ justifyContent: 'center'}}><Media
-             src={ localStorage.getItem('photoURL')}
-             style = {{maxHeight: '256px', maxWidth: '256px', borderRadius: '20px'}}
-             /></Row>
-              <Row style= {{ justifyContent: 'center'}}>{ localStorage.getItem('name') }</Row>
-              <Row style= {{ justifyContent: 'center'}}>{ localStorage.getItem('email') }</Row>
-              { this.state.loaded &&
+          <Row style= {{ padding: '20px'}}>
+        <Col xs="4">
+      <Card>
+        <CardImg top style={{maxHeight: '340px', maxWidth: '340px'}} src={ localStorage.getItem('photoURL')} alt="Profile Image" />
+        <CardBody>
+    <CardTitle>{ localStorage.getItem('name')}</CardTitle>
+    <CardSubtitle>email : {localStorage.getItem('email')}</CardSubtitle>
+          { this.state.loaded &&
               <React.Fragment>
-              <Row style= {{ justifyContent: 'center'}}>{ this.state.lastLogin }</Row> 
-              <Row style= {{ justifyContent: 'center'}}>{ this.state.totalUsage }</Row> 
+              <CardText >Last Login : { this.state.lastLogin }<br></br> Total Completed poses : { this.state.totalUsage }</CardText>  
               </React.Fragment>
               }
-            </Col>
-          </Row>
-        </Container>
+        </CardBody>
+      </Card>
+      </Col>
+      <Col xs="8">
+      <Card>
+        <CardBody>
+    <CardTitle></CardTitle>
+          { this.state.loaded &&
+              <React.Fragment>
+                <MDBContainer>
+        <h3 className="mt-5">Poses Completed</h3>
+        <Pie data={this.state.dataPie} options={{ responsive: true }} />
+      </MDBContainer>
+              <CardText >Completed Pose : { this.state.posesCompleted }</CardText>  
+              </React.Fragment>
+              }
+        </CardBody>
+      </Card>
+      </Col>
+    </Row>
+    </Container>
       </div>
     </div>
     );
