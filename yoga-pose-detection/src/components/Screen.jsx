@@ -15,7 +15,8 @@ import {
   CardText,
   CardBody,
   CardTitle,
-  Button
+  Button,
+  CardFooter
 } from "reactstrap";
 import Header from "./Header.js";
 
@@ -36,11 +37,22 @@ import PoseNet from "./Camera";
 class Item extends Component {
   render() {
     console.log(this.props);
-
+    let color = "";
+    if (this.props.highlight) {
+      color += "primary";
+    }
+    let border = { border: "1px solid #9e9e9e" };
+    if (this.props.highlight) {
+      border = { border: "3px solid #4285f4" };
+    }
+    //this.props.highlight && "primary";
     return (
       <Col sm="4">
         <React.Fragment>
           <Card
+            style={border}
+            outline={this.props.highlight}
+            color={color}
             className="box m-3"
             onClick={() => this.props.onAddToCartClicked(this.props.item)}
           >
@@ -55,23 +67,36 @@ class Item extends Component {
               <CardTitle className="text-center font-weight-bold">
                 {this.props.item.poseName}
               </CardTitle>
-              <CardText className="text-center font-weight-bold">
-                {/* {" "} */}
-                {/* {this.props.item.desc} */}
-              </CardText>
-
-              {/* <Fragment>
-                <MDBBtn color="primary" size="sm">
-                  <MDBIcon icon="info" className="mr-1" />
-                </MDBBtn>
-              </Fragment> */}
-
-              <ModalExample
-                buttonLabel="more info"
-                className="buttonLabel"
-                item={this.props.item}
-              />
+              <CardText className="text-center font-weight-bold"></CardText>
+              <Row>
+                <Col>
+                  <ModalExample
+                    buttonLabel="info"
+                    className="buttonLabel"
+                    item={this.props.item}
+                  />
+                </Col>
+              </Row>
             </CardBody>
+            <CardFooter className="text-muted">
+              {this.props.item.sanskritName}
+
+              {this.props.item.difficulty === 1 && (
+                <Badge className="float-right" color="success" pill>
+                  Easy
+                </Badge>
+              )}
+              {this.props.item.difficulty === 2 && (
+                <Badge className="float-right" color="warning" pill>
+                  Medium
+                </Badge>
+              )}
+              {this.props.item.difficulty === 3 && (
+                <Badge className="float-right" color="danger" pill>
+                  Hard
+                </Badge>
+              )}
+            </CardFooter>
           </Card>
         </React.Fragment>
       </Col>
@@ -121,12 +146,14 @@ class Screen extends Component {
           <Row className="m-3">
             {this.state.items && this.state.items.length
               ? this.state.items.map(item => {
-                  console.log(item.id);
+                  console.log("item", item);
+                  console.log(this.isSelected(item.data()));
                   return (
                     <Item
                       key={item.id}
                       item={item.data()}
                       onAddToCartClicked={this.handleAddToCartClicked}
+                      highlight={this.isSelected(item.data())}
                     />
                   );
                 })
@@ -145,6 +172,28 @@ class Screen extends Component {
       </React.Fragment>
     );
   }
+
+  isSelected = item => {
+    console.log("00", item);
+    console.log("->", JSON.parse(localStorage.getItem("selectedPose")));
+    console.log(
+      "comparing",
+      item.poseName,
+      JSON.parse(localStorage.getItem("selectedPose")).poseName
+    );
+    console.log(
+      "is Selected",
+      item.poseName,
+      localStorage.getItem("selectedPose") &&
+        item.poseName ===
+          JSON.parse(localStorage.getItem("selectedPose")).poseName
+    );
+    return (
+      localStorage.getItem("selectedPose") &&
+      item.poseName ===
+        JSON.parse(localStorage.getItem("selectedPose")).poseName
+    );
+  };
 }
 
 export default Screen;

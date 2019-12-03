@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import * as posenet from "@tensorflow-models/posenet";
 import cloneDeep from "lodash/cloneDeep";
 import imagePath from "./../jojo_test2.jpg";
+import chairPoseImg from "./../Chair Pose.jpg";
 import { assertParamsConsistent } from "@tensorflow/tfjs-core/dist/ops/concat_util";
 import LoadingOverlay from "react-loading-overlay";
 import { Link } from "react-router-dom";
@@ -79,6 +80,7 @@ class PoseNet extends Component {
       }, 200);
     }
     var imageElement = document.getElementById("yogaPose");
+    //imageElement.crossOrigin = "Anonymous";
     const pose = await this.posenet.estimateSinglePose(imageElement, {
       flipHorizontal: false
     });
@@ -226,14 +228,22 @@ class PoseNet extends Component {
   }
 
   render() {
-    // var retrievedObject = JSON.parse(localStorage.getItem("selectedPose"));
-    // const benefits = retrievedObject.benefits;
-    // const poseName = retrievedObject.poseName;
-    // const difficulty = retrievedObject.difficulty;
-    // const sanskritName = retrievedObject.sanskritName;
-    // const desc = retrievedObject.desc;
+    var retrievedObject = JSON.parse(localStorage.getItem("selectedPose"));
+    const benefits = retrievedObject.benefits;
+    const poseName = retrievedObject.poseName;
+    const difficulty = retrievedObject.difficulty;
+    const sanskritName = retrievedObject.sanskritName;
+    const desc = retrievedObject.desc;
+    const imgSrc = retrievedObject.locimg;
 
-    // console.log("posename : " + poseName);
+    console.log(
+      "in posenet : ",
+      poseName,
+      benefits,
+      difficulty,
+      sanskritName,
+      desc
+    );
 
     return (
       <React.Fragment>
@@ -258,16 +268,16 @@ class PoseNet extends Component {
                 <div className="card">
                   <img
                     id="yogaPose"
-                    src={imagePath}
+                    src={imgSrc}
+                    //crossOrigin="f"
                     className="card-img-top"
-                    crossOrigin="anonymous"
                   />
                   <div className="card-body">
-                    {/* <h5 className="card-title">{poseName}</h5> */}
+                    <h5 className="card-title">{poseName}</h5>
                     <div className="card-text">
-                      {/* <i className="small">{sanskritName}</i> */}
+                      <i className="small">{sanskritName}</i>
                       <br />
-                      {/* {desc} */}
+                      {desc}
                     </div>
                   </div>
                   <ul className="list-group list-group-flush">
@@ -275,7 +285,7 @@ class PoseNet extends Component {
                       <li className="list-group-item">
                         <strong>Correctness</strong>
                         <br />
-                        {/* <div flush>{this.benefits}</div> */}
+                        {/* <div flush>{() => this.benefitsFun(benefits)}</div> */}
                         <Progress
                           type="circle"
                           width={70}
@@ -285,34 +295,17 @@ class PoseNet extends Component {
                     )}
                     <li className="list-group-item">
                       <strong>Benefits</strong>
-                      {/* <div flush>{benefits}</div> */}
+                      <br />
+                      {benefits.map(item => (
+                        <React.Fragment>
+                          <Badge color="info" pill>
+                            {item}
+                          </Badge>
+                          <span> </span>
+                        </React.Fragment>
+                      ))}
                     </li>
-                    {/* <li className="list-group-item">
-                    <strong>Difficulty</strong> <span> </span>
-                    {difficulty === 1 && (
-                      <Badge color="success" pill>
-                        Easy
-                      </Badge>
-                    )}
-                    {difficulty === 2 && (
-                      <Badge color="warning" pill>
-                        Medium
-                      </Badge>
-                    )}
-                    {difficulty === 3 && (
-                      <Badge color="danger" pill>
-                        Hard
-                      </Badge>
-                    )}
-                    <div flush>{this.difficulty}</div>
-                  </li> */}
-                    {/* <li className="list-group-item">
-                    {this.state && this.state.closeness}
-                  </li> */}
                   </ul>
-                  <div className="card-body">
-                    <Link to="/">Home</Link>
-                  </div>
                 </div>
               </div>
             </div>
@@ -323,15 +316,6 @@ class PoseNet extends Component {
   }
 
   //added by Harshraj
-
-  /* benefits = this.props.selectedPose.benefits.map(item => (
-    <React.Fragment>
-      <Badge color="info" pill>
-        {item}
-      </Badge>
-      <span> </span>
-    </React.Fragment>
-  )); */
 
   calculateCloseness(pose) {
     //console.log("test", pose);

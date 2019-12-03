@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import {
+  Button,
+  Modal,
+  ListGroup,
+  ListGroupItem,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
+} from "reactstrap";
 import NumericInput from "react-numeric-input";
 
 const ModalExample = props => {
@@ -17,8 +25,14 @@ const ModalExample = props => {
       </Button>
       <Modal isOpen={modal} toggle={toggle} className={className}>
         <ModalBody>
-          {"  "}
+          <h3>Description</h3>
           {item.desc}
+          <br /> <h3>Benefits</h3>
+          <ListGroup flush>
+            {item.benefits.map(b => (
+              <ListGroupItem disabled>{b}</ListGroupItem>
+            ))}
+          </ListGroup>
         </ModalBody>
         <ModalFooter>
           <Button
