@@ -6,9 +6,9 @@ import "bootstrap/dist/css/bootstrap.css";
 import PoseNet from "./Camera";
 
 class Practice extends React.Component {
-    render(){
-        return (<PoseNet></PoseNet>);
-    }
+  render() {
+    return <PoseNet />;
+  }
 }
 
 export default Practice;
