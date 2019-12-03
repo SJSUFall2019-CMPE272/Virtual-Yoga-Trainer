@@ -15,19 +15,34 @@ class Dashboard extends Component {
     user: localStorage.getItem('user')
   }
 
-/* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
-openNav() {
-  document.getElementById("mySidebar").style.width = "250px";
-  document.getElementById("main").style.marginLeft = "250px";
-  this.getUser();
+  componentWillMount(){
+    console.log('at dashboard');
+    var user = firebase.auth().currentUser;
+    var name, email, photoUrl, uid, emailVerified;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+      console.log('user found');
+      name = user.displayName;
+      email = user.email;
+      photoUrl = user.photoURL;
+      emailVerified = user.emailVerified;
+      uid = user.uid;
+      var docRef = firebase.firestore().collection("userData").where("email", "==", email)
+      .get()
+      .then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+            });
+        })
+        .catch(function(error) {
+            console.log("Error getting documents: ", error);
+        });
+      } else {
+        // No user is signed in.
+      }
+    });
 }
-
-/* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
-closeNav() {
-  document.getElementById("mySidebar").style.width = "0";
-  document.getElementById("main").style.marginLeft = "0";
-}
-
 
   render() {
     return (
