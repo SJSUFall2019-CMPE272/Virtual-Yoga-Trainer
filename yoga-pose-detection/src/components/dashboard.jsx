@@ -9,7 +9,11 @@ import { stringByteLength } from "@tensorflow/tfjs-core/dist/io/io_utils";
 
 class Dashboard extends Component {
   state = {
-    loaded: false
+    loaded: false,
+    lastLogin: "",
+    totalUsage: 0,
+    posesCompleted: [],
+    poseHistory: {}
   }
   props = {
     user: localStorage.getItem('user')
@@ -18,14 +22,15 @@ class Dashboard extends Component {
   componentDidMount(){
     console.log('at dashboard');
     firebase.firestore().collection("userData").where("email", "==", localStorage.getItem('email')).get().then(
-      function(querySnapshot) {
+      (querySnapshot) => {
         console.log("Inside querysnapshot",querySnapshot);
         var nw = true;
-        querySnapshot.forEach(function(doc) {
+        querySnapshot.forEach((doc) => {
             // doc.data() is never undefined for query doc snapshots
             nw = false;
             console.log("User exists")
             console.log(doc.id, " => ", doc.data());
+            this.setState({loaded: true, lastLogin: doc.data().lastLogin, totalUsage: doc.data().totalUsage });
         });
         if (nw){
           console.log("New user");
@@ -47,21 +52,9 @@ class Dashboard extends Component {
       }
     ).catch(
       function(error) {
-        console.log("New user");
-            //Assuming new user so inserting stuff
-            var today = new Date();
-            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-            let newUser = {
-              email: localStorage.getItem('email'),
-              lastLogin: date,
-              name: localStorage.getItem('name'),
-              poseHistory: {},
-              posesCompleted: [],
-              totalUsage: 1,
-              userImg: localStorage.getItem('photoURL')
-            };
-            firebase.firestore().collection('userData').doc(localStorage.getItem('email')).set(newUser);
-            console.log("Created new entry for user");
+        console.log("Error in get doc");
+        console.log(error);
+
       }
     );
 }
@@ -80,6 +73,12 @@ class Dashboard extends Component {
              /></Row>
               <Row style= {{ justifyContent: 'center'}}>{ localStorage.getItem('name') }</Row>
               <Row style= {{ justifyContent: 'center'}}>{ localStorage.getItem('email') }</Row>
+              { this.state.loaded &&
+              <React.Fragment>
+              <Row style= {{ justifyContent: 'center'}}>{ this.state.lastLogin }</Row> 
+              <Row style= {{ justifyContent: 'center'}}>{ this.state.totalUsage }</Row> 
+              </React.Fragment>
+              }
             </Col>
           </Row>
         </Container>
