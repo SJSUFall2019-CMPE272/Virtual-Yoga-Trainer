@@ -9,7 +9,7 @@ Capitalizing on the fact that there are over 230 million smartphone users in the
 
 
 ## Architecture diagram
-![Architecture diagram](https://user-images.githubusercontent.com/18594304/66626073-bc253200-ebab-11e9-8fb9-9b1ac984f09d.png)
+![Architecture diagram](https://user-images.githubusercontent.com/38210397/70111147-3d2a0400-1606-11ea-9bdd-d22933625273.PNG)
 
 ## Tech Stack
 ### Machine learning
