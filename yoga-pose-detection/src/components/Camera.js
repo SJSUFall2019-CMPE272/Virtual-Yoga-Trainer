@@ -49,7 +49,9 @@ class PoseNet extends Component {
   }
 
   state = {
-    loading: true
+    loading: true,
+    completedPose: false,
+    poseProgress: 0
   };
 
   getCanvas = elem => {
@@ -298,11 +300,12 @@ class PoseNet extends Component {
                         <strong>Correctness</strong>
                         <br />
                         {/* <div flush>{() => this.benefitsFun(benefits)}</div> */}
-                        <Progress
+                        <Progress id="myprogress"
                           type="circle"
                           width={70}
                           percent={Math.floor(this.state.percentMatch)}
                         />
+                        <Progress percent={Math.floor(this.state.poseProgress)*3.3} status={ this.state.completedPose? "success": "error"} />
                       </li>
                     )}
                     <li className="list-group-item">
@@ -350,6 +353,23 @@ class PoseNet extends Component {
     }
 
     this.setState({ percentMatch: 100 - closeness * 100 });
+
+    //check progress
+    if (this.state.completedPose === false){
+      if (Math.floor(this.state.percentMatch) > 50) {
+        var prog = this.state.poseProgress;
+        prog+=1;
+        this.setState({poseProgress: prog })
+        console.log("Progress : " + prog);
+      } else {
+        this.setState({poseProgress: 0})
+        console.log("Reset pose progress");
+      }  
+      if (this.state.poseProgress > 30) {
+        console.log("Pose completed");
+        this.setState({completedPose: true})
+      } 
+    }
   }
 
   // handPoseFromImage = pose => {
