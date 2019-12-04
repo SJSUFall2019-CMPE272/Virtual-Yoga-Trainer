@@ -64,7 +64,7 @@ class Login extends React.Component {
             name: localStorage.getItem("name"),
             poseHistory: {},
             posesCompleted: [],
-            totalUsage: 1,
+            totalUsage: 0,
             userImg: localStorage.getItem("photoURL")
           };
           firebase
