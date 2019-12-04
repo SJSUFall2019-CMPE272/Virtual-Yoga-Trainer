@@ -174,25 +174,27 @@ class Screen extends Component {
   }
 
   isSelected = item => {
-    console.log("00", item);
-    console.log("->", JSON.parse(localStorage.getItem("selectedPose")));
-    console.log(
-      "comparing",
-      item.poseName,
-      JSON.parse(localStorage.getItem("selectedPose")).poseName
-    );
-    console.log(
-      "is Selected",
-      item.poseName,
-      localStorage.getItem("selectedPose") &&
+    if (localStorage.getItem("selectedPose")) {
+      console.log("00", item);
+      console.log("->", JSON.parse(localStorage.getItem("selectedPose")));
+      console.log(
+        "comparing",
+        item.poseName,
+        JSON.parse(localStorage.getItem("selectedPose")).poseName
+      );
+      console.log(
+        "is Selected",
+        item.poseName,
+        localStorage.getItem("selectedPose") &&
+          item.poseName ===
+            JSON.parse(localStorage.getItem("selectedPose")).poseName
+      );
+      return (
+        localStorage.getItem("selectedPose") &&
         item.poseName ===
           JSON.parse(localStorage.getItem("selectedPose")).poseName
-    );
-    return (
-      localStorage.getItem("selectedPose") &&
-      item.poseName ===
-        JSON.parse(localStorage.getItem("selectedPose")).poseName
-    );
+      );
+    }
   };
 }
 
