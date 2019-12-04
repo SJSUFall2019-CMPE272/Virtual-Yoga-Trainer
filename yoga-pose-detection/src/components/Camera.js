@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { Progress } from "react-sweet-progress";
 import "react-sweet-progress/lib/style.css";
 import Header from "./Header";
+import { Row, Col } from "reactstrap";
 var mode = "weighted";
 
 class PoseNet extends Component {
@@ -51,7 +52,7 @@ class PoseNet extends Component {
   state = {
     loading: true,
     completedPose: false,
-    poseProgress: 0
+    poseProgress: 1
   };
 
   getCanvas = elem => {
@@ -266,6 +267,19 @@ class PoseNet extends Component {
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-8">
+              {this.state.poseProgress && (
+                <Row className="mt-3">
+                  <Col md="2">
+                    <h5 className="float-right">Progress</h5>
+                  </Col>
+                  <Col md="10">
+                    <Progress
+                      percent={Math.floor(this.state.poseProgress) * 3.3}
+                      status={this.state.completedPose ? "success" : "error"}
+                    />
+                  </Col>
+                </Row>
+              )}
               <LoadingOverlay
                 active={this.state.loading}
                 spinner
@@ -318,12 +332,18 @@ class PoseNet extends Component {
                         <strong>Correctness</strong>
                         <br />
                         {/* <div flush>{() => this.benefitsFun(benefits)}</div> */}
-                        <Progress id="myprogress"
+                        <Progress
+                          id="myprogress"
                           type="circle"
                           width={70}
                           percent={Math.floor(this.state.percentMatch)}
                         />
-                        <Progress percent={Math.floor(this.state.poseProgress)*3.3} status={ this.state.completedPose? "success": "error"} />
+                        {/* <Progress
+                          percent={Math.floor(this.state.poseProgress) * 3.3}
+                          status={
+                            this.state.completedPose ? "success" : "error"
+                          }
+                        /> */}
                       </li>
                     )}
                     <li className="list-group-item">
@@ -373,20 +393,20 @@ class PoseNet extends Component {
     this.setState({ percentMatch: 100 - closeness * 100 });
 
     //check progress
-    if (this.state.completedPose === false){
+    if (this.state.completedPose === false) {
       if (Math.floor(this.state.percentMatch) > 50) {
         var prog = this.state.poseProgress;
-        prog+=1;
-        this.setState({poseProgress: prog })
+        prog += 1;
+        this.setState({ poseProgress: prog });
         console.log("Progress : " + prog);
       } else {
-        this.setState({poseProgress: 0})
+        this.setState({ poseProgress: 1 });
         console.log("Reset pose progress");
-      }  
+      }
       if (this.state.poseProgress > 30) {
         console.log("Pose completed");
-        this.setState({completedPose: true})
-      } 
+        this.setState({ completedPose: true });
+      }
     }
   }
 
