@@ -16,6 +16,7 @@ import { Progress } from "react-sweet-progress";
 import "react-sweet-progress/lib/style.css";
 import Header from "./Header";
 import { Row, Col } from "reactstrap";
+import firebase from "firebase"; //firebase auth
 var mode = "weighted";
 
 class PoseNet extends Component {
@@ -394,7 +395,7 @@ class PoseNet extends Component {
 
     //check progress
     if (this.state.completedPose === false) {
-      if (Math.floor(this.state.percentMatch) > 50) {
+      if (Math.floor(this.state.percentMatch) > 80) {
         var prog = this.state.poseProgress;
         prog += 1;
         this.setState({ poseProgress: prog });
@@ -405,6 +406,42 @@ class PoseNet extends Component {
       }
       if (this.state.poseProgress > 30) {
         console.log("Pose completed");
+        //add entry to firebase
+        firebase
+          .firestore()
+          .collection("userData")
+          .where("email", "==", localStorage.getItem("email"))
+          .get()
+          .then(querySnapshot => {
+            console.log("Inside querysnapshot", querySnapshot);
+            var nw = true;
+            querySnapshot.forEach(doc => {
+              // doc.data() is never undefined for query doc snapshots
+              nw = false;
+              console.log("User exists");
+              console.log(doc.id, " => ", doc.data());
+              var posesCompleted_ = doc.data().posesCompleted;
+              var retrievedObject = JSON.parse(
+                localStorage.getItem("selectedPose")
+              );
+              var totalUsage_ = doc.data().totalUsage;
+              const poseName = retrievedObject.poseName;
+              if (posesCompleted_.includes(poseName)) {
+                console.log("User already completed this pose");
+              } else {
+                posesCompleted_.push(poseName);
+                totalUsage_ += 1;
+                firebase
+                  .firestore()
+                  .collection("userData")
+                  .doc(localStorage.getItem("email"))
+                  .update({
+                    posesCompleted: posesCompleted_,
+                    totalUsage: totalUsage_
+                  });
+              }
+            });
+          });
         this.setState({ completedPose: true });
       }
     }
