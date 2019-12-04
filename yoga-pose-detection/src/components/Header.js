@@ -3,6 +3,7 @@ import { NavItem, NavLink } from "reactstrap";
 import { Redirect } from "react-router-dom";
 import { browserHistory } from "react-router";
 import fire from "../config/fire";
+import firebase from "firebase";
 import './Header.css';
 
 import {
@@ -29,7 +30,12 @@ class Header extends Component {
   }
 
   logout = () => {
+    // update session time
     fire.auth().signOut().then(()=> {
+      var today = new Date();
+      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+ ' ' + today.getUTCHours() + ':' + today.getUTCMinutes() + ':' + today.getUTCSeconds();
+      firebase.firestore().collection("userData").doc(localStorage.getItem('email')).update({ lastLogin: date});
+      //update user login time
         localStorage.removeItem('user');
         localStorage.removeItem('name');
         localStorage.removeItem('email');

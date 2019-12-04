@@ -26,18 +26,54 @@ class Login extends React.Component {
     loginerror: false
   };
   provider = new firebase.auth.GoogleAuthProvider();
+
+  firsttime() {
+    firebase.firestore().collection("userData").where("email", "==", localStorage.getItem('email')).get().then(
+      (querySnapshot) => {
+        console.log("Inside querysnapshot",querySnapshot);
+        var nw = true;
+        querySnapshot.forEach((doc) => {
+            // doc.data() is never undefined for query doc snapshots
+            nw = false;
+            console.log("User exists")
+            console.log(doc.id, " => ", doc.data());
+        });
+        if (nw){
+          console.log("New user");
+            //Assuming new user so inserting stuff
+            var today = new Date();
+            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+ ' ' + today.getUTCHours() + ':' + today.getUTCMinutes() + ':' + today.getUTCSeconds();
+            let newUser = {
+              email: localStorage.getItem('email'),
+              lastLogin: date,
+              name: localStorage.getItem('name'),
+              poseHistory: {},
+              posesCompleted: [],
+              totalUsage: 1,
+              userImg: localStorage.getItem('photoURL')
+            };
+            firebase.firestore().collection('userData').doc(localStorage.getItem('email')).set(newUser);
+            console.log("Created new entry for user");
+        }
+  }
+    )
+}
+
   login(e) {
     this.setState({loginerror: false});
     e.preventDefault();
     fire
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(u => { localStorage.setItem('user', u);
+      .then(u => { 
       var user = fire.auth().currentUser;
       localStorage.setItem('name', user.email);
       localStorage.setItem('email', user.email);
       localStorage.setItem('photoURL', "https://southernautomotivegroup.com.au/wp-content/uploads/2015/04/generic-placeholder-person.png");
-      this.setState({loggedin: true})})
+      //check if firsttime
+      this.firsttime();
+      localStorage.setItem('user', u);
+      })
       .catch(error => {
         this.setState({loginerror: error.message})
         console.log(error);
@@ -52,11 +88,13 @@ class Login extends React.Component {
       .signInWithPopup(this.provider)
       .then((result) => {
         console.log(result);
-        localStorage.setItem('user', fire.auth().currentUser);
         var user = fire.auth().currentUser;
         localStorage.setItem('name', user.displayName);
         localStorage.setItem('email', user.email);
         localStorage.setItem('photoURL', user.photoURL);
+        //check if firsttime
+        this.firsttime();
+        localStorage.setItem('user', fire.auth().currentUser);
         this.setState({loggedin: true});
       })
       .catch(error => {

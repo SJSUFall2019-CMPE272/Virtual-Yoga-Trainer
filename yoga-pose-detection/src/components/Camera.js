@@ -5,6 +5,10 @@ import * as posenet from "@tensorflow-models/posenet";
 import cloneDeep from "lodash/cloneDeep";
 import imagePath from "./../jojo_test2.jpg";
 import chairPoseImg from "./../Chair Pose.jpg";
+import upwardSalute from "./../upwardsalute.jpg";
+import standingHalf from "./../standinghalf.jpg";
+import moutainPose from "./../mountainpose.jpg";
+import extendedTriangle from "./../extendedtriangle.jpg";
 import { assertParamsConsistent } from "@tensorflow/tfjs-core/dist/ops/concat_util";
 import LoadingOverlay from "react-loading-overlay";
 import { Link } from "react-router-dom";
@@ -245,6 +249,14 @@ class PoseNet extends Component {
       desc
     );
 
+    var imageMap = {
+      "Upward Salute" : upwardSalute,
+      "Chair Pose" : chairPoseImg,
+      "Standing Half forward Bend" : standingHalf,
+      "Mountain Pose" : moutainPose,
+      "Extended Triangle Pose" : extendedTriangle
+    };
+
     return (
       <React.Fragment>
         <Header />
@@ -268,7 +280,7 @@ class PoseNet extends Component {
                 <div className="card">
                   <img
                     id="yogaPose"
-                    src={chairPoseImg}
+                    src={imageMap[poseName]}
                     //crossOrigin="f"
                     className="card-img-top"
                   />

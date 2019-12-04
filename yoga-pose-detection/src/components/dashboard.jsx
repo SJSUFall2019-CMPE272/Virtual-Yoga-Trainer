@@ -18,7 +18,7 @@ class Dashboard extends Component {
     loaded: false,
     lastLogin: "",
     totalUsage: 0,
-    posesCompleted: [],
+    posesCompleted: ['No poses completed'],
     poseHistory: {},
     dataPie: {
       labels: ["Completed", "Incomplete"],
@@ -64,20 +64,27 @@ class Dashboard extends Component {
         });
         if (nw){
           console.log("New user");
+          this.setState({loaded: true});
             //Assuming new user so inserting stuff
-            var today = new Date();
-            var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+ ' ' + today.getUTCHours() + ':' + today.getUTCMinutes() + ':' + today.getUTCSeconds();
-            let newUser = {
-              email: localStorage.getItem('email'),
-              lastLogin: date,
-              name: localStorage.getItem('name'),
-              poseHistory: {},
-              posesCompleted: [],
-              totalUsage: 1,
-              userImg: localStorage.getItem('photoURL')
-            };
-            firebase.firestore().collection('userData').doc(localStorage.getItem('email')).set(newUser);
-            console.log("Created new entry for user");
+            // var today = new Date();
+            // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()+ ' ' + today.getUTCHours() + ':' + today.getUTCMinutes() + ':' + today.getUTCSeconds();
+            // let newUser = {
+            //   email: localStorage.getItem('email'),
+            //   lastLogin: date,
+            //   name: localStorage.getItem('name'),
+            //   poseHistory: {},
+            //   posesCompleted: [],
+            //   totalUsage: 1,
+            //   userImg: localStorage.getItem('photoURL')
+            // };
+            // firebase.firestore().collection('userData').doc(localStorage.getItem('email')).set(newUser);
+            // console.log("Created new entry for user");
+            // var dataPie = {...this.state.dataPie};
+            // dataPie.datasets[0].data.push(0);
+            // dataPie.datasets[0].data.push(10);
+            // this.setState({dataPie: dataPie})
+            // this.setState({posesCompleted: ['No poses completed'], poseHistory: {}});
+
         }
       }
     ).catch(
