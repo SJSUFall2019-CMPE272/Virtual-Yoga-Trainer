@@ -253,11 +253,11 @@ class PoseNet extends Component {
     );
 
     var imageMap = {
-      "Upward Salute" : upwardSalute,
-      "Chair Pose" : chairPoseImg,
-      "Standing Half forward Bend" : standingHalf,
-      "Mountain Pose" : moutainPose,
-      "Extended Triangle Pose" : extendedTriangle
+      "Upward Salute": upwardSalute,
+      "Chair Pose": chairPoseImg,
+      "Standing Half forward Bend": standingHalf,
+      "Mountain Pose": moutainPose,
+      "Extended Triangle Pose": extendedTriangle
     };
 
     return (
@@ -288,7 +288,25 @@ class PoseNet extends Component {
                     className="card-img-top"
                   />
                   <div className="card-body">
-                    <h5 className="card-title">{poseName}</h5>
+                    <h5 className="card-title">
+                      {poseName}
+                      {difficulty === 1 && (
+                        <Badge className="float-right" color="success" pill>
+                          Easy
+                        </Badge>
+                      )}
+                      {difficulty === 2 && (
+                        <Badge className="float-right" color="warning" pill>
+                          Medium
+                        </Badge>
+                      )}
+                      {difficulty === 3 && (
+                        <Badge className="float-right" color="danger" pill>
+                          Hard
+                        </Badge>
+                      )}
+                    </h5>
+
                     <div className="card-text">
                       <i className="small">{sanskritName}</i>
                       <br />
@@ -396,28 +414,6 @@ class PoseNet extends Component {
       } 
     }
   }
-
-  // handPoseFromImage = pose => {
-  //   console.log("in PoseDetection", pose);
-  //   this.setState({ poseFrmImg: pose });
-  //   const vector = this.createVectorFromObject1(pose);
-  //   this.setState({ imageVector: vector });
-  // };
-
-  // handlePoseFromVideo = pose => {
-  //   //console.log("pose from video", pose);
-  //   this.setState({ poseFrmVideo: pose });
-  //   const vector = this.createVectorFromObject2(pose);
-  //   //console.log(vector);
-  //   this.setState({ videoVector: vector });
-  //   if (this.state.imageVector !== null) {
-  //     const closeness = this.weightedDistanceMatching(
-  //       this.state.imageVector,
-  //       vector
-  //     );
-  //     this.setState({ closeness });
-  //   }
-  // };
 
   createVectorFromObject1(poseObj) {
     let vector = [];
