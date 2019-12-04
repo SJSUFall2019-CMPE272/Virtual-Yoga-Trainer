@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Media } from 'reactstrap';
+import { Container, Row, Col, Media, Badge } from 'reactstrap';
 import { Pie } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import {
@@ -56,7 +56,7 @@ class Dashboard extends Component {
             this.setState({loaded: true, lastLogin: doc.data().lastLogin, totalUsage: doc.data().totalUsage });
             var dataPie = {...this.state.dataPie};
             dataPie.datasets[0].data.push(usage);
-            dataPie.datasets[0].data.push(10 - usage);
+            dataPie.datasets[0].data.push(6 - usage);
             console.log(dataPie.datasets[0].data);
             this.setState({dataPie: dataPie})
             //poses completed
@@ -127,7 +127,13 @@ class Dashboard extends Component {
         <h3 className="mt-5">Poses Completed</h3>
         <Pie data={this.state.dataPie} options={{ responsive: true }} />
       </MDBContainer>
-              <CardText >Completed Pose : { this.state.posesCompleted }</CardText>  
+              <CardText >Completed Pose : { this.state.posesCompleted.map((item => (
+                        <React.Fragment>
+                          <Badge color="info" pill>
+                            {item}
+                          </Badge>
+                          <span> </span>
+                        </React.Fragment>))) }</CardText>  
               </React.Fragment>
               }
         </CardBody>

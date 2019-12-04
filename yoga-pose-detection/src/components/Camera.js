@@ -9,6 +9,7 @@ import upwardSalute from "./../upwardsalute.jpg";
 import standingHalf from "./../standinghalf.jpg";
 import moutainPose from "./../mountainpose.jpg";
 import extendedTriangle from "./../extendedtriangle.jpg";
+import Warrior from "./../warrior.jpg";
 import { assertParamsConsistent } from "@tensorflow/tfjs-core/dist/ops/concat_util";
 import LoadingOverlay from "react-loading-overlay";
 import { Link } from "react-router-dom";
@@ -258,7 +259,8 @@ class PoseNet extends Component {
       "Chair Pose": chairPoseImg,
       "Standing Half forward Bend": standingHalf,
       "Mountain Pose": moutainPose,
-      "Extended Triangle Pose": extendedTriangle
+      "Extended Triangle Pose": extendedTriangle,
+      "Warrior Pose": Warrior
     };
 
     return (
@@ -275,7 +277,7 @@ class PoseNet extends Component {
                   </Col>
                   <Col md="10">
                     <Progress
-                      percent={Math.floor(this.state.poseProgress) * 3.3}
+                      percent={Math.floor(this.state.poseProgress)}
                       status={this.state.completedPose ? "success" : "error"}
                     />
                   </Col>
@@ -404,7 +406,7 @@ class PoseNet extends Component {
         this.setState({ poseProgress: 1 });
         console.log("Reset pose progress");
       }
-      if (this.state.poseProgress > 30) {
+      if (this.state.poseProgress > 100) {
         console.log("Pose completed");
         //add entry to firebase
         firebase
