@@ -9,7 +9,8 @@ import {
   CardBody,
   CardTitle,
   CardSubtitle,
-  Button
+  Button,
+  Navbar
 } from "reactstrap";
 
 import { Form, FormGroup, Label, Input, FormText } from "reactstrap";
@@ -134,6 +135,13 @@ class Login extends React.Component {
     console.log(this.state.user);
     return (
       <div>
+        <div className="header">
+          <Navbar color="" light expand="md">
+            <h1 style={{ color: "red" }}>
+              <span className="font-weight-bold"> Yoga Trainer</span>
+            </h1>
+          </Navbar>
+        </div>
         {user != undefined && <Redirect to={{ pathname: "/dashboard" }} />}
         {user == undefined && (
           <Container style={{ paddingTop: "20px" }}>

@@ -87,7 +87,7 @@ class Header extends Component {
           <div className="header">
             <Navbar color="" light expand="md">
               <h1 style={{ color: "red" }}>
-                <span className="font-weight-bold">Yogi</span>
+                <span className="font-weight-bold"> Yoga Trainer</span>
               </h1>
               <Nav className="ml-auto" navbar>
                 <NavItem>
